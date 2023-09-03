@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <Header 
-      @toggle-add-task="toggleAddTask" 
-      title="Task Tracker" 
-      :showAddTask="showAddTask" 
+    <Header
+      @toggle-add-task="toggleAddTask"
+      title="Task Tracker"
+      :showAddTask="showAddTask"
     />
     <router-view :showAddTask="showAddTask"></router-view>
     <Footer />
-  </div> 
+  </div>
 </template>
 
 <script>
@@ -18,7 +18,7 @@ export default {
   name: 'App',
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
@@ -32,8 +32,6 @@ export default {
   },
 }
 </script>
-
-<!-- ----------------------------------------------------------------------------------- -->
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');

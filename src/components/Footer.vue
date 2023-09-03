@@ -1,17 +1,17 @@
 <template>
     <footer>
-        <p>Copyright &copy; 2023</p>
-        <routerLink to="/about">About</routerLink>
+      <p>Copyright &copy; 2021</p>
+      <router-link to="/about">About</router-link>
     </footer>
-</template> 
-
-<style scoped>
-a {
+  </template>
+  
+  <style scoped>
+  a {
     color: #333;
-} 
-
-footer {
+  }
+  
+  footer {
     margin-top: 30px;
     text-align: center;
-}
-</style>
+  }
+  </style>  
