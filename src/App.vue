@@ -1,11 +1,15 @@
 <template>
   <div class="container">
-    <Header title="Task Tracker"/>
+    <Header @toggle-add-task="toggleAddTask" title="Task Tracker" :showAddTask="showAddTask" />
+    <div v-if="showAddTask">
+      <AddTask @add-task="addTask" />
+    </div>
     <Tasks 
     @toggle-reminder="toggleReminder" 
     @delete-task="deleteTask" 
     :tasks="tasks"
     />
+    <Footer />
   </div> 
 </template>
 
@@ -13,50 +17,91 @@
 
 <script>
 import Header from './components/Header'
+import Footer from './components/Footer'
 import Tasks from './components/Tasks'
+import AddTask from './components/AddTask'
 
 export default {
   name: 'App',
   components: {
     Header,
-    Tasks
+    Footer,
+    Tasks,
+    AddTask,
+
   },
   data() {
     return {
-      tasks: []
+      tasks: [],
+      showAddTask: false,
     }
   },
   methods: {
-    deleteTask(id) {
+    toggleAddTask() {
+      this.showAddTask = !this.showAddTask
+    },
+    async addTask(task) {
+      const res = await fetch('api/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(task),
+      })
+
+      const data = await res.json() // res. = respone
+
+      this.tasks = [...this.tasks, data]
+    },
+    async deleteTask(id) {
       if(confirm('Are you sure?')) {
-        this.tasks = this.tasks.filter((task) => task.id !== id)
+        const res = await fetch(`api/tasks/${id}`, {
+          method: 'DELETE'
+        })
+
+        res.status == 200 
+          ? (this.tasks = this.tasks.filter((task) => 
+          task.id !== id)) 
+          : alert('Error deleting task')
       }
     },
-    toggleReminder(id) {
-      this.tasks = this.tasks.map((task) => task.id == id ? {...task, reminder: !task.reminder} : task)
+    async toggleReminder(id) {
+      const taskToToggle = await this.fetchTask(id)
+      const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
+
+      const res = await fetch(`api/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(updTask),
+      })
+
+      const data = await res.json()
+
+      this.tasks = this.tasks.map((task) =>
+        task.id === id ? { ...task, reminder: data.reminder } : task
+      )
+    },
+    async fetchTasks() {
+      const res = await fetch('api/tasks')
+
+      const data = await res.json()
+
+      return data
+    },
+    async fetchTask(id) {
+      const res = await fetch(`api/${id}`)
+
+      const data = await res.json()
+
+      return data
     },
   },
-  created() {
-    this.tasks = [
-      {
-        id: 1,
-        text: 'doc appt',
-        day: 'June 1st',
-        reminder: true,
-        }, 
-        {
-        id: 2,
-        text: 'fr appt',
-        day: 'July 1st', 
-        reminder: false,
-        }, 
-        {
-        id: 3,
-        text: 'bro appt',
-        day: 'Dec 1st',
-        reminder: true,
-        },
-      ]
+
+
+  async created() {
+    this.tasks = await this.fetchTasks()
   },
 }
 </script>
