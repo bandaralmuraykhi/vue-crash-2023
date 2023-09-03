@@ -24,6 +24,7 @@ export default {
 .fas {
     color: red;
 }
+
 .task {
     background: #f4f4f4;
     margin: 5px;
@@ -34,6 +35,7 @@ export default {
 .task.reminder {
     border-left: 5px solid green;
 }
+
 .task h3 {
     display: flex;
     align-items: center;

@@ -22,7 +22,6 @@
   </form>
 </template>
 
-
 <script>
 export default {
     name: 'AddTask',
@@ -30,11 +29,12 @@ export default {
       return {
         text: '',
         day: '',
-        reminder: false
+        reminder: false,
       }
     },
     methods: {
-      onSubmit() {
+      onSubmit(e) {
+        e.preventDefault()
 
         if(!this.text) {
           alert('Please add a task')
