@@ -1,9 +1,9 @@
 <template>
     <footer>
         <p>Copyright &copy; 2023</p>
-        <a herf="/about">About</a>
+        <routerLink to="/about">About</routerLink>
     </footer>
-</template>
+</template> 
 
 <style scoped>
 a {
